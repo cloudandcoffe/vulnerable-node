@@ -16,12 +16,12 @@ jobs:
       - uses: actions/checkout@v4
       - run: semgrep ci
         env:
-          SEMGREP_APP_TOKEN: ${{secrets.SEMGREP_APP_TOKEN}}
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
       - name: Create version
         run: echo "VERSION=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
       - name: Build artifact
         run: |
-          mkdir artifacts
+          mkdir -p artifacts/${{ github.repository }}
           echo "${{ github.repository }}" > artifacts/${{ github.repository }}.txt
           echo "Version: $VERSION" >> artifacts/${{ github.repository }}.txt
       - name: Upload artifact
