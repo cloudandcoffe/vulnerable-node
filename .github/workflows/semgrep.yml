@@ -29,3 +29,9 @@ jobs:
         with:
           name: build-artifact
           path: artifacts/
+          echo "Version: $VERSION" >> artifacts/${{ github.repository }}.txt
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifact
+          path: artifacts/
