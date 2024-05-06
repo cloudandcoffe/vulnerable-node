@@ -20,7 +20,7 @@ jobs:
       - name: Create version
         run: echo "VERSION=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
       - name: Create artifact directories
-        run: mkdir -p artifacts/${{ github.repository }}
+        run: mkdir -p artifacts/${{github.repository}}
       - name: Build artifact
         run: |
           echo "${{ github.repository }}" > artifacts/${{ github.repository }}.txt
