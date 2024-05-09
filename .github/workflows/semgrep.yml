@@ -54,4 +54,3 @@ jobs:
           git push
       - name: List tags
         run: git tag
-
