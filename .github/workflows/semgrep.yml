@@ -4,7 +4,7 @@ on:
   workflow_dispatch: {}
   push:
     branches:
-      - master
+      - main
 jobs:
   semgrep:
     name: semgrep/ci
@@ -18,7 +18,10 @@ jobs:
         env:
           SEMGREP_APP_TOKEN: ${{secrets.SEMGREP_APP_TOKEN}}
       - name: Create version
+        id: create_version
         run: echo "VERSION=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        env:
+          VERSION: ${{ steps.create_version.outputs.VERSION }}
       - name: Create artifact directories
         run: mkdir -p artifacts/${{github.repository}}
       - name: Build artifact
@@ -30,10 +33,22 @@ jobs:
         with:
           name: build-artifact
           path: artifacts/
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.DEVELOPER_TOKEN}}
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: Release ${{ env.VERSION }}
+          body: New version ${{ env.VERSION }} created.
+          draft: false
+          prerelease: false
       - name: Commit and push
         run: |
           git config --global user.name 'cloudandcoffe'
           git config --global user.email 'cloudandcoffe@gmail.com'
           git add .
-          git commit -m "New version created: $VERSION"
+          git commit -m "New version created: ${{env.VERSION}}"
           git push
+      - name: List tags
